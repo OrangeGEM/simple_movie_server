@@ -13,7 +13,7 @@ export class MoviesService {
     private readonly moviesRepository: Repository<MovieEntity>,
   ) {}
 
-  async parseMovie() {
+  async parseMovie(): Promise<MovieEntity[]> {
     const token = await axios({ //GET TOKEN 
       method: "POST",
       url: process.env['GET_TOKEN_URL'],

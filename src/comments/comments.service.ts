@@ -1,26 +1,28 @@
+import { MovieEntity } from '@app/movies/movies.entity';
 import { Injectable } from '@nestjs/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CommentEntity } from './comments.entity';
+import { SetCommentsDto } from './dto/setcomments.dto';
+
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  constructor(
+    @InjectRepository(MovieEntity)
+    private readonly movieRepository: Repository<MovieEntity>,
+
+    @InjectRepository(CommentEntity)
+    private readonly commentRepository: Repository<CommentEntity>
+  ) {}
+
+  async getComments(id: string): Promise<CommentEntity[]> {
+    return await this.commentRepository.find({ where: { movie_id: id } });
   }
 
-  findAll() {
-    return `This action returns all comments`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async setComments(setCommentsDto: SetCommentsDto): Promise<CommentEntity> {
+    const newComment = new CommentEntity();
+    Object.assign(newComment, setCommentsDto);
+    return await this.commentRepository.save(newComment)
   }
 }

@@ -18,6 +18,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  if (!process.env['GET_TOKEN_URL'] || !process.env['PASSWORD_HASH_SALT'])
+    throw new Error('Shit happened, cannot find token url or salt in environment');
+
   await app.listen(3001);
 }
 bootstrap();

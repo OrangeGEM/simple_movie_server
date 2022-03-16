@@ -3,11 +3,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UserEntity } from "./user.entity";
-import { sign, decode} from 'jsonwebtoken';
+import { sign, decode, verify } from 'jsonwebtoken';
 import { JWT_SECRET } from "@app/config";
 import { UserResponseInterface } from "./types/userResponse.interface";
 import { LoginUserDto } from "./dto/loginUser.dto";
 import { comparePassword, hashPassword } from "@app/common/utils";
+import { LoginUserWithGoogleDto } from "./dto/loginUserWithGoogle.dto";
+import { GoogleTokenInterface } from "./types/googleToken.interface";
 
 @Injectable()
 export class UserService {
@@ -51,6 +53,27 @@ export class UserService {
         return user;
     }
 
+    async loginUserWithGoogle(loginUserWithGoogleDto: LoginUserWithGoogleDto): Promise<any> { //TODO: delete any
+        const decodedToken = this.decodeJwt(loginUserWithGoogleDto.token);
+        if(decodedToken.iss != "accounts.google.com")
+            throw new HttpException("Token not valid", HttpStatus.UNPROCESSABLE_ENTITY);
+
+        const user = await this.userRepository.findOne({ email: decodedToken.email })
+        if(user) {
+            if(!user.googleAuth) {
+                throw new HttpException("User has been registrated without google auth", HttpStatus.UNPROCESSABLE_ENTITY);
+            } else {
+                return user;
+            }
+        } 
+
+        const newUser = new UserEntity();
+        newUser.email = decodedToken.email;
+        newUser.googleAuth = true;
+        
+        return await this.userRepository.save(newUser);
+    }
+
     findById(id: number, options?): Promise<UserEntity> {
         return this.userRepository.findOne(id, options);
     }
@@ -78,5 +101,4 @@ export class UserService {
     public decodeJwt(token: string): any {
         return decode(token);
     }
-
 }

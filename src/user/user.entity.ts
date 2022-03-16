@@ -14,8 +14,12 @@ export class UserEntity {
     email: string
 
     @ApiProperty()
-    @Column({ select: false })
+    @Column({ select: false, nullable: true })
     password: string
+
+    @ApiProperty()
+    @Column({ default: false })
+    googleAuth: boolean
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;

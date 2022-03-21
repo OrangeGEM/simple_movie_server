@@ -48,7 +48,8 @@ export class MoviesService {
       })
       element = {
         ...element,
-        cast: cast
+        cast: cast,
+        urls: ['https://www.youtube.com/watch?v=8g18jFHCLXk'], //TODO: NEED TO DELETE AND INSERT NORMAL DATA  
       }
 
       const movie = new MovieEntity();

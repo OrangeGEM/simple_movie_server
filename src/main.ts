@@ -14,6 +14,8 @@ async function bootstrap() {
     .setDescription('The Simple-Movies API description')
     .setVersion('1.0')
     .addTag('User')
+    .addTag('Movie')
+    .addTag('Comments')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

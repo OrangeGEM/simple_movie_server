@@ -39,6 +39,17 @@ export class UserController {
         return this.userService.buildUserResponse(user)
     }
 
+    @Post('login/google')
+    @ApiTags("User")
+    @ApiBody({ type: LoginUserWithGoogleDto })
+    @ApiResponse({ status: 200, description: "User set"})
+    @ApiResponse({ status: 422, description: "Token not valid" })
+    async loginWithGoogle(@Body() loginUserWithGoogleDto: LoginUserWithGoogleDto): Promise<any> { //TODO: delete any
+        const user = await this.userService.loginUserWithGoogle(loginUserWithGoogleDto);
+        return this.userService.buildUserResponse(user);
+    }
+
+
     @Get()
     @UseGuards(AuthGuard)
     @ApiTags("User")
@@ -50,11 +61,5 @@ export class UserController {
     })
     async currentUser(@User() user: UserEntity): Promise<UserEntity> {
         return user;
-    }
-
-    @Post('login/google')
-    async loginWithGoogle(@Body() loginUserWithGoogleDto: LoginUserWithGoogleDto): Promise<any> { //TODO: delete any
-        const user = await this.userService.loginUserWithGoogle(loginUserWithGoogleDto);
-        return this.userService.buildUserResponse(user);
     }
 } 

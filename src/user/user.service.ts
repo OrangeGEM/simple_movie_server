@@ -9,7 +9,6 @@ import { UserResponseInterface } from "./types/userResponse.interface";
 import { LoginUserDto } from "./dto/loginUser.dto";
 import { comparePassword, hashPassword } from "@app/common/utils";
 import { LoginUserWithGoogleDto } from "./dto/loginUserWithGoogle.dto";
-import { GoogleTokenInterface } from "./types/googleToken.interface";
 
 @Injectable()
 export class UserService {

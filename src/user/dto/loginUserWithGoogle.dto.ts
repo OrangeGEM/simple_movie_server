@@ -1,3 +1,8 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty } from "class-validator";
+
 export class LoginUserWithGoogleDto {
-    token: string;
+    @ApiProperty()
+    @IsNotEmpty()
+    readonly token: string;
 }

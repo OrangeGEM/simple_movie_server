@@ -25,7 +25,10 @@ export class MovieEntity {
     rating: string;
 
     @Column({ nullable: true, type: 'jsonb' })
-    cast: Array<string>; //String is JSON
+    cast: Array<string>; 
+
+    @Column({ nullable: true, type: 'jsonb' })
+    urls: Array<string>
     
     @OneToMany(() => CommentEntity, comments => comments.id)
     comments: CommentEntity[];

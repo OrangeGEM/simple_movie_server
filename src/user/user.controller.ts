@@ -7,6 +7,7 @@ import { UserService } from "./user.service";
 import { User } from "./decorators/user.decorator";
 import { AuthGuard } from "./guards/auth.guard";
 import { ApiBody, ApiHeader, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { LoginUserWithGoogleDto } from "./dto/loginUserWithGoogle.dto";
 
 
 @Controller('users')
@@ -49,5 +50,11 @@ export class UserController {
     })
     async currentUser(@User() user: UserEntity): Promise<UserEntity> {
         return user;
+    }
+
+    @Post('login/google')
+    async loginWithGoogle(@Body() loginUserWithGoogleDto: LoginUserWithGoogleDto): Promise<any> { //TODO: delete any
+        const user = await this.userService.loginUserWithGoogle(loginUserWithGoogleDto);
+        return this.userService.buildUserResponse(user);
     }
 } 

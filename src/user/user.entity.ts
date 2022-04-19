@@ -8,7 +8,6 @@ export class UserEntity {
     @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number
-    
 
     @ApiProperty()
     @Column()
